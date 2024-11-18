@@ -1,0 +1,109 @@
+config1:
+  datasetconfig:
+    DataConfig:
+      path: "fka/awesome-chatgpt-prompts" # string
+      name: null # Optional[str]
+      data_dir: null # Optional[str]
+      data_files: null # Optional[Union[str, Sequence[str], Mapping[str, Union[str, Sequence[str]]]]]
+      split: "train" # Optional[Union[str, Split]]
+      cache_dir: null # Optional[str]
+      features: null # Optional[Features]
+      download_config: null # Optional[DownloadConfig]
+      download_mode: null # Optional[Union[DownloadMode, str]]
+      verification_mode: null # Optional[Union[VerificationMode, str]]
+      keep_in_memory: null # Optional[bool]
+      save_infos: false # bool
+      revision: null # Optional[Union[str, Version]]
+      token: null # Optional[Union[bool, str]]
+      streaming: false # bool
+      num_proc: null # Optional[int]
+      storage_options: null # Optional[Dict]
+      trust_remote_code: null # Optional[bool]
+    DatasetConfig:
+      split: "train"
+      train_ratio : 0.8
+      eval_ratio: 0.1
+      test_ratio:  0.1
+      input_columns: 
+        - act
+        - prompt #List[str] = None
+      target_column: "prompt" # str = None
+      max_length:  100
+      batch_size:  2
+
+  modelconfig:
+    ModelConfig:
+      pretrained_model_name_or_path: "gpt2" # str
+      cache_dir : './model'
+      token : null 
+      trust_remote_code : True
+
+      
+  promptconfig:
+    PromptTemplate:
+      template: |
+        You have to act in the role:
+        act: {act}
+        prompt: {prompt}
+        
+        ---
+      input_variables:
+        - act
+        - prompt
+  
+  trainingconfig:
+    CTrainingArguments:
+      output_dir: "./output"  # The output directory where the model predictions and checkpoints will be written.
+      overwrite_output_dir: true  # Overwrite the content of the output directory.
+      do_train: true  # Whether to run training or not.
+      do_eval: true  # Whether to run evaluation on the validation set or not.
+      do_predict: false  # Whether to run inference on the inference set or not.
+      evaluation_strategy: "steps"  # The evaluation strategy during training. ["no", "steps", "epoch"]
+      eval_steps: 500  # Number of update steps between two evaluations if eval_strategy="steps".
+      per_device_train_batch_size: 16  # The batch size per GPU/TPU core/CPU for training.
+      per_device_eval_batch_size: 16  # The batch size per GPU/TPU core/CPU for evaluation.
+      gradient_accumulation_steps: 4  # Number of updates steps to accumulate before a backward/update pass.
+      learning_rate: 0.001  # The initial learning rate for the AdamW optimizer.
+      weight_decay: 0.01  # The weight decay to apply to all layers except biases and LayerNorm weights.
+      max_grad_norm: 1.0  # Maximum gradient norm (for gradient clipping).
+      num_train_epochs: 3  # Total number of training epochs to perform.
+      max_steps: -1  # If > 0: set total number of training steps to perform. Overrides num_train_epochs.
+      warmup_steps: 0  # Number of steps used for a linear warmup from 0 to learning_rate.
+      save_steps: 500  # Save checkpoint every X updates steps.
+      save_total_limit: 3  # Limit the total amount of checkpoints. Deletes the older checkpoints.
+      fp16: false  # Whether to use 16-bit (mixed) precision training (through NVIDIA apex) instead of 32-bit.
+      logging_dir: "./logs"  # Directory for storing logs.
+      logging_steps: 100  # Log every X updates steps.
+      report_to: ["tensorboard"]  # The list of integrations to report the results and logs to.
+      load_best_model_at_end: true  # Whether to load the best model found at the end of training.
+      metric_for_best_model: "eval_loss"  # The metric to use to compare two models when deciding which one is the best.
+      greater_is_better: false  # Whether the best model is the one with the greater metric or not.
+      seed: 42  # Random seed that will be set at the beginning of training.
+      dataloader_num_workers: 4  # Number of subprocesses to use for data loading.
+      # sharded_ddp: "simple"  # Whether to use sharded DDP training (torch.distributed).
+      disable_tqdm: false  # Disable the tqdm progress bar.
+      resume_from_checkpoint: null  # The path to a folder with a valid checkpoint for resuming training.
+      remove_unused_columns: true  # Remove columns not required by the model.
+      label_smoothing_factor: 0.1  # The factor used for label smoothing.
+      prediction_loss_only: false  # Only return the loss during evaluation and prediction.
+      dataloader_pin_memory: true  # Whether to pin memory in data loaders or not.
+      no_cuda: false  # Whether to not use CUDA even when it is available or not.
+      ignore_data_skip: false  # When resuming training, whether to ignore skipping the first data batches.
+      push_to_hub: false  # Whether to push the model to the Hugging Face Hub.
+      remove_unused_columns: false  # Whether or not to remove columns unused by the model.
+      gradient_checkpointing: false  # If True, use gradient checkpointing to save memory.
+      log_level: "info"  # Log level to use during training ("debug", "info", "warn", "error", "critical").
+      adafactor: false  # Whether or not to use the Adafactor optimizer instead of AdamW.
+      dataloader_drop_last: false  # Drop the last incomplete batch if it is not divisible by batch size.
+      # max_memory: null  # Maximum memory available for each device (e.g., {"cuda:0": "11GB", "cpu": "2GB"}).
+      torch_compile: false  # Whether or not to use `torch.compile` (requires PyTorch >= 1.12).
+      past_index: -1  # The index of the past key value state in the model outputs.
+      lr_scheduler_type: "linear"  # The scheduler type to use ("linear", "cosine", "cosine_with_restarts", etc.).
+      logging_first_step: false  # Whether to log and evaluate the first global step or not.
+      skip_memory_metrics: true  # Whether or not to skip memory usage monitoring.
+      length_column_name: "length"  # Column name to be used for the sequence lengths.
+      use_legacy_prediction_loop: false  # Whether to use the legacy prediction loop.
+      optim: "adamw_torch"  # Optimizer to use ("adamw_hf", "adamw_torch", "adamw_apex_fused").
+      tpu_num_cores: null  # TPU: Number of TPU cores.
+      # gradient_accumulation_plugin: null  # Plugin for gradient accumulation ("none", "detect_overscan").
+

@@ -1,0 +1,414 @@
+framework: pt
+
+output_dir: 
+  help: The output directory where the model predictions and checkpoints will be written.
+
+overwrite_output_dir: 
+  default: false
+  help: Overwrite the content of the output directory. Use this to continue training if output_dir points to a checkpoint directory.
+
+do_train: 
+  default: false
+  help: Whether to run training.
+
+do_eval: 
+  default: false
+  help: Whether to run eval on the dev set.
+
+do_predict: 
+  default: false
+  help: Whether to run predictions on the test set.
+
+eval_strategy: 
+  default: no
+  help: The evaluation strategy to use.
+
+prediction_loss_only: 
+  default: false
+  help: When performing evaluation and predictions, only returns the loss.
+
+per_device_train_batch_size: 
+  default: 8
+  help: Batch size per GPU/TPU/MPS/NPU core/CPU for training.
+
+per_device_eval_batch_size: 
+  default: 8
+  help: Batch size per GPU/TPU/MPS/NPU core/CPU for evaluation.
+
+per_gpu_train_batch_size: 
+  default: null
+  help: Deprecated, the use of `--per_device_train_batch_size` is preferred. Batch size per GPU/TPU core/CPU for training.
+
+per_gpu_eval_batch_size: 
+  default: null
+  help: Deprecated, the use of `--per_device_eval_batch_size` is preferred. Batch size per GPU/TPU core/CPU for evaluation.
+
+gradient_accumulation_steps: 
+  default: 1
+  help: Number of updates steps to accumulate before performing a backward/update pass.
+
+eval_accumulation_steps: 
+  default: null
+  help: Number of predictions steps to accumulate before moving the tensors to the CPU.
+
+eval_delay: 
+  default: 0.0
+  help: Number of epochs or steps to wait for before the first evaluation can be performed, depending on the eval_strategy.
+
+learning_rate: 
+  default: 0.00005
+  help: The initial learning rate for AdamW.
+
+weight_decay: 
+  default: 0.0
+  help: Weight decay for AdamW if we apply some.
+
+adam_beta1: 
+  default: 0.9
+  help: Beta1 for AdamW optimizer.
+
+adam_beta2: 
+  default: 0.999
+  help: Beta2 for AdamW optimizer.
+
+adam_epsilon: 
+  default: 0.00000001
+  help: Epsilon for AdamW optimizer.
+
+max_grad_norm: 
+  default: 1.0
+  help: Max gradient norm.
+
+num_train_epochs: 
+  default: 3.0
+  help: Total number of training epochs to perform.
+
+max_steps: 
+  default: -1
+  help: If > 0set total number of training steps to perform. Override num_train_epochs.
+
+lr_scheduler_type: 
+  default: linear
+  help: The scheduler type to use.
+
+lr_scheduler_kwargs: 
+  default: {}
+  help: Extra parameters for the lr_scheduler such as {'num_cycles' 1} for the cosine with hard restarts.
+
+warmup_ratio: 
+  default: 0.0
+  help: Linear warmup over warmup_ratio fraction of total steps.
+
+warmup_steps: 
+  default: 0
+  help: Linear warmup over warmup_steps.
+
+log_level: 
+  default: passive
+  help: Logger log level to use on the main node.
+  choices: 
+    - passive
+    - debug
+    - info
+    - warning
+    - error
+    - critical
+
+log_level_replica: 
+  default: warning
+  help: Logger log level to use on replica nodes.
+  choices: 
+    - passive
+    - debug
+    - info
+    - warning
+    - error
+    - critical
+
+log_on_each_node: 
+  default: true
+  help: When doing a multinode distributed training, whether to log once per node or just once on the main node.
+
+logging_dir: 
+  default: null
+  help: Tensorboard log dir.
+
+logging_strategy: 
+  default: steps
+  help: The logging strategy to use.
+
+logging_first_step: 
+  default: false
+  help: Log the first global_step.
+
+logging_steps: 
+  default: 500
+  help: Log every X updates steps. Should be an integer or a float in range `[0,1)`.
+
+logging_nan_inf_filter: 
+  default: true
+  help: Filter nan and inf losses for logging.
+
+save_strategy: 
+  default: steps
+  help: The checkpoint save strategy to use.
+
+save_steps: 
+  default: 500
+  help: Save checkpoint every X updates steps. Should be an integer or a float in range `[0,1)`.
+
+save_total_limit: 
+  default: null
+  help: If a value is passed, will limit the total amount of checkpoints. Deletes the older checkpoints in `output_dir`.
+
+save_safetensors: 
+  default: true
+  help: Use safetensors saving and loading for state dicts instead of default torch.load and torch.save.
+
+save_on_each_node: 
+  default: false
+  help: When doing multi-node distributed training, whether to save models and checkpoints on each node, or only on the main one.
+
+save_only_model: 
+  default: false
+  help: When checkpointing, whether to only save the model, or also the optimizer, scheduler & rng state.
+
+restore_callback_states_from_checkpoint: 
+  default: false
+  help: Whether to restore the callback states from the checkpoint.
+
+no_cuda: 
+  default: false
+  help: This argument is deprecated. It will be removed in version 5.0 of Transformers.
+
+use_cpu: 
+  default: false
+  help: Whether or not to use CPU. If set to False, we will use cuda/tpu/mps/npu device if available.
+
+use_mps_device: 
+  default: false
+  help: This argument is deprecated. It will be removed in version 5.0 of Transformers.
+
+seed: 
+  default: 42
+  help: Random seed that will be set at the beginning of training.
+
+data_seed: 
+  default: null
+  help: Random seed to be used with data samplers.
+
+jit_mode_eval: 
+  default: false
+  help: Whether or not to use PyTorch jit trace for inference.
+
+use_ipex: 
+  default: false
+  help: Use Intel extension for PyTorch when it is available.
+
+bf16: 
+  default: false
+  help: Whether to use bf16 (mixed) precision instead of 32-bit.
+
+fp16: 
+  default: false
+  help: Whether to use fp16 (mixed) precision instead of 32-bit.
+
+fp16_opt_level: 
+  default: O1
+  help: For fp16Apex AMP optimization level.
+
+half_precision_backend: 
+  default: auto
+  help: The backend to be used for half precision.
+  choices: 
+    - auto
+    - apex
+    - cpu_amp
+
+bf16_full_eval: 
+  default: false
+  help: Whether to use full bfloat16 evaluation instead of 32-bit.
+
+fp16_full_eval: 
+  default: false
+  help: Whether to use full float16 evaluation instead of 32-bit.
+
+tf32: 
+  default: null
+  help: Whether to enable tf32 mode, available in Ampere and newer GPU architectures.
+
+local_rank: 
+  default: -1
+  help: For distributed training local_rank.
+
+ddp_backend: 
+  default: null
+  help: The backend to be used for distributed training.
+  choices: 
+    - nccl
+    - gloo
+    - mpi
+    - ccl
+    - hccl
+    - cncl
+
+tpu_num_cores: 
+  default: null
+  help: TPU Number of TPU cores.
+
+tpu_metrics_debug: 
+  default: false
+  help: TPU Whether to print debug metrics.
+
+debug: 
+  default: ""
+  help: Whether or not to enable debug mode.
+  choices: 
+    - underflow_overflow
+    - tpu_metrics_debug
+
+dataloader_drop_last: 
+  default: false
+  help: Drop the last incomplete batch if it is not divisible by the batch size.
+
+eval_steps: 
+  default: null
+  help: Run an evaluation every X steps. Should be an integer or a float in range `[0,1)`.
+
+dataloader_num_workers: 
+  default: 0
+  help: Number of subprocesses to use for data loading (PyTorch only).
+
+dataloader_prefetch_factor: 
+  default: 2
+  help: Number of batches loaded in advance by each worker. Default is 2 for PyTorch < 2.0.0 and otherwise None.
+
+past_index: 
+  default: -1
+  help: If >=0, uses the corresponding part of the output as the past state for next step.
+
+run_name: 
+  default: null
+  help: An optional descriptor for the run. Notably used for wandb logging.
+
+disable_tqdm: 
+  default: null
+  help: Whether or not to disable the tqdm progress bars.
+
+remove_unused_columns: 
+  default: true
+  help: Whether or not to automatically remove the columns unused by the model forward method.
+
+label_names: 
+  default: null
+  help: The list of keys in your dictionary of inputs that correspond to the labels.
+
+load_best_model_at_end: 
+  default: false
+  help: Whether or not to load the best model found during training at the end of training.
+
+metric_for_best_model: 
+  default: null
+  help: If `load_best_model_at_end` is True, the metric to use to compare two different models.
+
+greater_is_better: 
+  default: null
+  help: Whether the `metric_for_best_model` should be maximized or not.
+
+ignore_data_skip: 
+  default: false
+  help: When resuming training, whether or not to skip the first epochs and batches to get to the same training data.
+
+sharded_ddp: 
+  default: ""
+  help: Whether or not to use sharded DDP training (in distributed training only).
+  choices: 
+    - simple
+    - zero_dp_2
+    - zero_dp_3
+    - offload
+
+fsdp: 
+  default: null
+  help: Whether or not to use fully sharded data parallel (FSDP) training (in distributed training only).
+
+fsdp_min_num_params: 
+  default: 0
+  help: Minimum number of parameters for a layer to be wrapped by FSDP. FSDP will be enabled on all layers that have at least this many parameters.
+
+fsdp_transformer_layer_cls_to_wrap: 
+  default: null
+  help: Transformer layer class name (case-sensitive) to wrap, e.g., 'T5Block' or 'BertLayer'. Can be a single class name or a comma-separated list of class names.
+
+fsdp_backward_prefetch: 
+  default: null
+  help: FSDP backward prefetch mode.
+
+fsdp_sharding_strategy: 
+  default: null
+  help: FSDP Sharding Strategy.
+
+fsdp_auto_wrap_policy: 
+  default: null
+  help: FSDP automatic wrap policy.
+
+fsdp_grad_ckpt: 
+  default: null
+  help: Whether or not to checkpoint activations in a layer to prevent any recomputation.
+
+fsdp_offload_params: 
+  default: false
+  help: FSDP parameter offloading to CPU.
+
+fsdp_mixed_precision: 
+  default: false
+  help: Whether or not to use mixed precision training in FSDP.
+
+fsdp_state_dict_type: 
+  default: full
+  help: FSDP state dict type.
+  choices: 
+    - full
+    - local
+    - sharded
+
+fsdp_activation_checkpointing: 
+  default: false
+  help: Whether or not to use gradient checkpointing with FSDP.
+
+fsdp_activation_checkpointing_policy: 
+  default: null
+  help: Policy for FSDP activation checkpointing.
+
+fsdp_param_dtype: 
+  default: null
+  help: Data type for the parameters in FSDP.
+
+fsdp_param_dtype_policy: 
+  default: null
+  help: Policy for FSDP parameter data type.
+
+peft_config: 
+  default: null
+  help: Configuration for Parameter Efficient Fine-Tuning (PEFT).
+
+torchdynamo: 
+  default: null
+  help: TorchDynamo configuration for optimizing model execution.
+
+report_to: 
+  default: null
+  help: The list of integrations to report the results and logs to.
+
+logging_nan_inf_filter: 
+  default: true
+  help: Filter nan and inf losses for logging.
+
+resume_from_checkpoint: 
+  default: null
+  help: Whether or not to resume from a checkpoint.
+
+run_name: 
+  default: null
+  help: An optional descriptor for the run. Notably used for wandb logging.
+

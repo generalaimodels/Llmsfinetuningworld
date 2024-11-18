@@ -1,0 +1,94 @@
+config1:
+  datasetconfig:
+    DataConfig:
+      path: "fka/awesome-chatgpt-prompts" # string
+      name: null # Optional[str]
+      data_dir: null # Optional[str]
+      data_files: null # Optional[Union[str, Sequence[str], Mapping[str, Union[str, Sequence[str]]]]]
+      split: "train" # Optional[Union[str, Split]]
+      cache_dir: null # Optional[str]
+      features: null # Optional[Features]
+      download_config: null # Optional[DownloadConfig]
+      download_mode: null # Optional[Union[DownloadMode, str]]
+      verification_mode: null # Optional[Union[VerificationMode, str]]
+      keep_in_memory: null # Optional[bool]
+      save_infos: false # bool
+      revision: null # Optional[Union[str, Version]]
+      token: null # Optional[Union[bool, str]]
+      streaming: false # bool
+      num_proc: null # Optional[int]
+      storage_options: null # Optional[Dict]
+      trust_remote_code: null # Optional[bool]
+    DatasetConfig:
+      split: "train"
+      train_ratio : 0.8
+      eval_ratio: 0.1
+      test_ratio:  0.1
+      input_columns: 
+        - act
+        - prompt #List[str] = None
+      target_column: "prompt" # str = None
+      max_length:  100
+      batch_size:  2
+
+  modelconfig:
+    ModelConfig:
+      pretrained_model_name_or_path: "gpt2" # str
+      cache_dir : './model'
+      token : null 
+      trust_remote_code : True
+
+      
+  promptconfig:
+    PromptTemplate:
+      template: |
+        You have to act in the role:
+        act: {act}
+        prompt: {prompt}
+        
+        ---
+      input_variables:
+        - act
+        - prompt
+  
+  PrefixTuningConfig:
+    peft_type: 
+    auto_mapping: 
+    base_model_name_or_path: 
+    revision: 
+    task_type: 
+    inference_mode: 
+    num_virtual_tokens: 
+    token_dim: 
+    num_transformer_submodules: 
+    num_attention_heads: 
+    num_layers: 
+    encoder_hidden_size: 
+    prefix_projection: 
+ 
+
+  trainingconfig:
+    CTrainingArguments:
+      output_dir: "./output"  # The output directory where the model predictions and checkpoints will be written.
+      do_train: true  # Whether to run training or not.
+      do_eval: true  # Whether to run evaluation on the validation set or not.
+      do_predict: false  # Whether to run inference on the inference set or not.
+      seed: 42  # Random seed that will be set at the beginning of training.
+      per_device_train_batch_size: 8  # The batch size per GPU/TPU core/CPU for training.
+      per_device_eval_batch_size: 8  # The batch size per GPU/TPU core/CPU for evaluation.
+      weight_decay: 0.0  # The weight decay to apply (if not zero) to all layers except biases and LayerNorm weights.
+      learning_rate: 0.001  # The initial learning rate for the AdamW optimizer.
+      gradient_accumulation_steps: 1  # Number of updates steps to accumulate the gradients for before a backward/update pass.
+      max_steps: -1  # If set to a positive number, the total number of training steps to perform. Overrides num_train_epochs.
+      lr_scheduler_type: "linear"  # The scheduler type to use.
+      warmup_steps: 1  # Number of steps used for a linear warmup from 0 to learning_rate. Overrides warmup_ratio.
+      eval_strategy: "epoch"  # The evaluation strategy during training. Possible values: ["no", "steps", "epoch"]
+      eval_steps: 1  # Number of update steps between two evaluations if eval_strategy="steps".
+      eval_metric: "accuracy"  # The evaluation metric used for the task.
+      keep_checkpoint_max: 1  # The maximum number of best checkpoint files to keep.
+      early_stopping_patience: 10  # Number of evaluation calls with no improvement after which training will be stopped.
+      early_stopping_threshold: 0.0  # How much the specified evaluation metric must improve to satisfy early stopping conditions.
+      pad_to_max_length: 100
+      num_train_epochs : 3 
+      is_regression: true
+
